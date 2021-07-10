@@ -1,0 +1,9 @@
+.ion-person {
+    font-size: 70px;
+}
+.error-note {
+    display: flex;
+    align-items: flex-start;
+    margin: 10px;
+    text-align: left !important;
+}

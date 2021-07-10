@@ -1,0 +1,7 @@
+{
+  "name": "upcomingMovies",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}

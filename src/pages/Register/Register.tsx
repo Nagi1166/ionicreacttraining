@@ -7,11 +7,13 @@ import {
     IonInput,
     IonButton,
     IonAlert,
-    IonNote
+    IonNote,
+    IonLoading
 } from "@ionic/react";
 
 import { personCircle } from "ionicons/icons"
 import React, { useState } from 'react';
+import axios from 'axios';
 
 import "./Register.css"
 
@@ -29,51 +31,126 @@ const Register: React.FC = () => {
     const [errorEmail, setErrorEmail] = useState<string>("");
     const [errorMobile, setErrorMobile] = useState<string>("");
     const [errorPassword, setErrorPassword] = useState<string>("");
+    const [loader, setLoader] = useState<boolean>(false);
 
+    const nameRegex = /^[a-zA-Z ]+$/;
+    const mobileRegex = /^([0|\+[0-9]{1,5})?([7-9][0-9]{9})$/;
+    const emailRegex = /^((?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\]))$/;
+    const passwordRegex = /^.{6,}$/;
 
-    const handleRegiser = () => {
-        if (!firstName) {
-            // setHeader("Info!");
-            // setMessage("Please enter the first name");
-            // setAlert(true);
+    const handleFirstName = (value: any) => {
+        setFirstName(value);
+        if (!value) {
             setErrorFirstName("Please enter first name");
             return;
         }
-        if (!lastName) {
-            // setHeader("Info!");
-            // setMessage("Please enter the first name");
-            // setAlert(true);
+        if (!nameRegex.test(String(value).toLocaleLowerCase())) {
+            setErrorFirstName("Firstname is invalid");
+            return;
+        }
+        setErrorFirstName("");
+    }
+
+    const handleLastName = (value: any) => {
+        setLastName(value);
+        if (!value) {
             setErrorLastName("Please enter last name");
             return;
         }
-        if (!email) {
-            // setHeader("Info!");
-            // setMessage("Please enter the first name");
-            // setAlert(true);
-            setErrorEmail("Please enter email");
+        if (!nameRegex.test(String(value).toLocaleLowerCase())) {
+            setErrorLastName("Lastname is invalid");
             return;
         }
-        if (!mobile) {
-            // setHeader("Info!");
-            // setMessage("Please enter the first name");
-            // setAlert(true);
+        setErrorLastName("");
+    }
+
+    const handleMobile = (value: any) => {
+        setMobile(value);
+        if (!value) {
             setErrorMobile("Please enter mobile");
             return;
         }
-        if (!password) {
-            // setHeader("Info!");
-            // setMessage("Please enter the first name");
-            // setAlert(true);
+        if (!mobileRegex.test(value)) {
+            setErrorMobile("Mobile is invalid");
+            return;
+        }
+        setErrorMobile("");
+    }
+
+    const handleEmail = (value: any) => {
+        setEmail(value);
+        if (!value) {
+            setErrorEmail("Please enter email");
+            return;
+        }
+        if (!emailRegex.test(String(value).toLocaleLowerCase())) {
+            setErrorEmail("email is invalid");
+            return;
+        }
+        setErrorEmail("");
+    }
+
+    const handlePassword = (value: any) => {
+        setPassword(value);
+        if (!value) {
             setErrorPassword("Please enter password");
             return;
         }
+        if (!passwordRegex.test(value)) {
+            setErrorPassword("password is invalid");
+            return;
+        }
+        setErrorPassword("");
+    }
+
+
+    const handleRegiser = () => {
         setErrorFirstName("");
         setErrorLastName("");
         setErrorEmail("");
         setErrorMobile("");
         setErrorPassword("");
-    }
 
+        const api = axios.create({
+            baseURL: `http://localhost:3000`
+        })
+
+        const data = {
+            firstName,
+            lastName,
+            email,
+            password,
+            mobile,
+        }
+        setLoader(true);
+        api.post('/users', data).then((result) => {
+            setLoader(false);
+            console.log(result);
+            if (result && result.data) {
+                if (result.data.status === "success") {
+                    setHeader("Success!");
+                    setMessage("User Register Successfully");
+                    setAlert(true);
+                    return;
+                }
+                setHeader("Error!");
+                setMessage(result.data.message);
+                setAlert(true);
+                return;
+            }
+            console.log("Invlid response from server");
+            setHeader("Error!");
+            setMessage("Server error. Please try again later");
+            setAlert(true);
+        }
+        ).catch((err) => {
+            setLoader(false);
+            console.log(err);
+            setHeader("Error!");
+            setMessage("Server error. Please try again later");
+            setAlert(true);
+        })
+    }
 
     return (
         <IonPage>
@@ -102,6 +179,12 @@ const Register: React.FC = () => {
                         </IonRow>
                         <IonRow>
                             <IonCol>
+                                <IonLoading isOpen={loader} spinner="lines" message={"Registering please wait..."}
+                                    onDidDismiss={() => setLoader(false)} ></IonLoading>
+                            </IonCol>
+                        </IonRow>
+                        <IonRow>
+                            <IonCol>
                                 <IonIcon className="ion-person" icon={personCircle} color="secondary"></IonIcon>
                             </IonCol>
                         </IonRow>
@@ -109,11 +192,7 @@ const Register: React.FC = () => {
                             <IonCol>
                                 <IonItem>
                                     <IonLabel position="floating">FirstName</IonLabel>
-                                    <IonInput type="text" value={firstName} onIonChange={(e) => {
-                                        setFirstName(e.detail.value!);
-                                        e.detail.value ? setErrorFirstName("") : setErrorFirstName("Please enter firstname")
-                                    }}>
-
+                                    <IonInput type="text" value={firstName} onIonChange={(e) => handleFirstName(e.detail.value!)}>
                                     </IonInput>
                                 </IonItem>
                                 {errorFirstName ? (<IonNote className="error-note" color="danger">{errorFirstName}</IonNote>) : ""}
@@ -123,10 +202,7 @@ const Register: React.FC = () => {
                             <IonCol>
                                 <IonItem>
                                     <IonLabel position="floating">LastName</IonLabel>
-                                    <IonInput type="text" value={lastName} onIonChange={(e) => {
-                                        setLastName(e.detail.value!);
-                                        e.detail.value ? setErrorLastName("") : setErrorLastName("Please enter last name")
-                                    }}>
+                                    <IonInput type="text" value={lastName} onIonChange={(e) => handleLastName(e.detail.value!)}>
 
                                     </IonInput>
                                 </IonItem>
@@ -137,10 +213,7 @@ const Register: React.FC = () => {
                             <IonCol>
                                 <IonItem>
                                     <IonLabel position="floating">Email</IonLabel>
-                                    <IonInput type="email" value={email} onIonChange={(e) => {
-                                        setEmail(e.detail.value!);
-                                        e.detail.value ? setErrorEmail("") : setErrorEmail("Please enter email")
-                                    }}>
+                                    <IonInput type="email" value={email} onIonChange={(e) => handleEmail(e.detail.value!)}>
 
                                     </IonInput>
                                 </IonItem>
@@ -151,10 +224,7 @@ const Register: React.FC = () => {
                             <IonCol>
                                 <IonItem>
                                     <IonLabel position="floating">Mobile</IonLabel>
-                                    <IonInput type="tel" value={mobile} onIonChange={(e) => {
-                                        setMobile(e.detail.value!);
-                                        e.detail.value ? setErrorMobile("") : setErrorMobile("Please enter mobile")
-                                    }}>
+                                    <IonInput type="tel" value={mobile} onIonChange={(e) => handleMobile(e.detail.value!)}>
 
                                     </IonInput>
                                 </IonItem>
@@ -165,8 +235,7 @@ const Register: React.FC = () => {
                             <IonCol>
                                 <IonItem>
                                     <IonLabel position="floating">Password</IonLabel>
-                                    <IonInput type="password" value={password} onIonChange={(e) =>  {setPassword(e.detail.value!);
-                                     e.detail.value ? setErrorPassword("") : setErrorPassword("Please enter password")}}>
+                                    <IonInput type="password" value={password} onIonChange={(e) => handlePassword(e.detail.value!)}>
                                     </IonInput>
                                 </IonItem>
                                 {errorPassword ? (<IonNote className="error-note" color="danger">{errorPassword}</IonNote>) : ""}
@@ -174,7 +243,11 @@ const Register: React.FC = () => {
                         </IonRow>
                         <IonRow>
                             <IonCol>
-                                <IonButton expand="block" onClick={handleRegiser}>Register</IonButton>
+                                <IonButton disabled={(errorFirstName ? true : false) ||
+                                    (errorLastName ? true : false) ||
+                                    (errorMobile ? true : false) ||
+                                    (errorPassword ? true : false) ||
+                                    (errorEmail ? true : false)} expand="block" onClick={handleRegiser}>Register</IonButton>
                             </IonCol>
                         </IonRow>
                     </IonGrid>

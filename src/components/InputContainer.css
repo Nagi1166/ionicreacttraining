@@ -1,0 +1,6 @@
+.error-note {
+    display: flex;
+    align-items: flex-start;
+    margin: 10px;
+    text-align: left !important;
+}

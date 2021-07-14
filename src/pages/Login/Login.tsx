@@ -1,23 +1,36 @@
 import {
     IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonCard, IonGrid,
-    IonRow, IonCol, IonIcon, IonButton
+    IonRow, IonCol, IonIcon, IonButton, IonAlert, IonLoading
 } from "@ionic/react";
 import { InputConfig } from "../../model/InputConfig";
 import { personCircle } from "ionicons/icons"
 import './Login.css'
 import InputContainer from "../../components/InputContainer";
 import { useState } from "react";
+import axios from 'axios';
+import { useHistory } from "react-router-dom";
 
 
 const Login: React.FC = () => {
-
+    const history = useHistory();
+    const [mobile, setMobile] = useState<String>("");
+    const [password, setpassword] = useState<String>("");
     const [isErrorMobile, setErrorMobile] = useState<boolean>(true);
     const [isErrorPassword, setErrorPassword] = useState<boolean>(true);
+    const [showLoading, setShowLoading] = useState<boolean>(false);
+    const [message, setMessage] = useState<string>("");
+    const [iserror, setIserror] = useState<boolean>(false);
+    const [header, setHeader] = useState<string>("Error!");
+    const [isLoginSuccess, setLoginSuccess] = useState<boolean>();
 
 
     const onChange = (values: any) => {
-        const formType = formGroup.find(x => x.name === values.name);
-        if (formType) formType.value = values.value;
+        if (values.name === "mobile") {
+            setMobile(values.value);
+        }
+        if (values.name === "password") {
+            setpassword(values.value);
+        }
     }
 
     const onError = (values: any) => {
@@ -29,8 +42,39 @@ const Login: React.FC = () => {
         }
     }
 
-    const handleSubmit = (values: any) => {
+    const handleSubmit = (event: any) => {
+        if (event) event.preventDefault();
+        if (!mobile || !password) return;
 
+        const api = axios.create({
+            baseURL: `http://localhost:3000`
+        })
+        setShowLoading(true);
+        setLoginSuccess(false);
+        api.post("/auth/login", { mobile: mobile, password: password })
+            .then(res => {
+                console.log(res);
+                setShowLoading(false);
+                if (res.data.status === "success") {
+                    //authService.login(res.data);
+                    setHeader("Success!");
+                    setMessage("Login successfully");
+                    setIserror(true)
+                    setLoginSuccess(true);
+                }
+                else {
+                    setHeader("Error!");
+                    setMessage(res.data.message);
+                    setIserror(true)
+                }
+                //history.push("/dashboard/" + email);
+            })
+            .catch(error => {
+                setShowLoading(false);
+                setHeader("Error!");
+                setMessage("Server Error! Please try again later");
+                setIserror(true)
+            })
     }
 
     const formGroup: InputConfig[] = [
@@ -66,6 +110,13 @@ const Login: React.FC = () => {
         }
     ]
 
+    const handleAlertClose = () => {
+        setIserror(false)
+        if (isLoginSuccess) {
+            history.push('/upcomingmovie');
+        }
+    }
+
 
     return (
         <IonPage>
@@ -88,6 +139,26 @@ const Login: React.FC = () => {
                     <form onSubmit={(e) => handleSubmit(e)}>
                         <IonCard class="ion-margin">
                             <IonGrid>
+                                <IonRow>
+                                    <IonCol>
+                                        <IonAlert
+                                            isOpen={iserror}
+                                            onDidDismiss={() => handleAlertClose()}
+                                            header={header}
+                                            message={message}
+                                            buttons={["Dismiss"]}
+                                        />
+                                    </IonCol>
+                                    <IonCol>
+                                        <IonLoading
+                                            spinner="lines"
+                                            cssClass='main-menu-loader'
+                                            isOpen={showLoading}
+                                            onDidDismiss={() => setShowLoading(false)}
+                                            message={'Login, Please wait...'}
+                                        ></IonLoading>
+                                    </IonCol>
+                                </IonRow>
                                 <IonRow>
                                     <IonCol>
                                         <IonIcon className="ion-person" icon={personCircle} color="secondary"></IonIcon>

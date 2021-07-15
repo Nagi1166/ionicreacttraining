@@ -1,5 +1,5 @@
 import UpcomingMovieCard from "../components/UpcomingMovieCard"
-import { IonContent, IonGrid, IonRow, IonCol, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonContent, IonGrid, IonRow, IonCol, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonMenuButton } from '@ionic/react';
 import IUpcomingMovie from "../model/IUpcomingMovie";
 
 
@@ -30,6 +30,9 @@ const UpcomingMovie: React.FC = () => {
         <IonPage>
             <IonHeader>
                 <IonToolbar>
+                    <IonButtons slot="start">
+                        <IonMenuButton></IonMenuButton>
+                    </IonButtons>
                     <IonTitle>
                         Upcoming Movies
                     </IonTitle>

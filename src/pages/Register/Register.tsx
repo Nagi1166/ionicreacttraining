@@ -16,8 +16,10 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 import "./Register.css"
+import { useHistory } from "react-router";
 
 const Register: React.FC = () => {
+    const history = useHistory();
     const [firstName, setFirstName] = useState<string>("");
     const [lastName, setLastName] = useState<string>("");
     const [email, setEmail] = useState<string>("");
@@ -128,9 +130,10 @@ const Register: React.FC = () => {
             console.log(result);
             if (result && result.data) {
                 if (result.data.status === "success") {
-                    setHeader("Success!");
-                    setMessage("User Register Successfully");
-                    setAlert(true);
+                    // setHeader("Success!");
+                    // setMessage("User Register Successfully");
+                    // setAlert(true);
+                    history.push("/login");
                     return;
                 }
                 setHeader("Error!");
@@ -248,6 +251,9 @@ const Register: React.FC = () => {
                                     (errorMobile ? true : false) ||
                                     (errorPassword ? true : false) ||
                                     (errorEmail ? true : false)} expand="block" onClick={handleRegiser}>Register</IonButton>
+                                <p style={{ fontSize: "medium" }}>
+                                    Already registered. Please   <a onClick={() => history.push("./login")}> Login</a> Here
+                                </p>
                             </IonCol>
                         </IonRow>
                     </IonGrid>

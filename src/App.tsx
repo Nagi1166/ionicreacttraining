@@ -1,5 +1,5 @@
 import { Redirect, Route } from 'react-router-dom';
-import { IonApp, IonRouterOutlet } from '@ionic/react';
+import { IonApp, IonRouterOutlet, IonSplitPane } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import Home from './pages/Home';
 import UpcomingMovie from './pages/UpcomingMovie';
@@ -24,29 +24,66 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 import Register from './pages/Register/Register';
 import Login from './pages/Login/Login';
+import Menu from './components/Menu/Menu';
+import { useEffect, useState } from 'react';
+import authService from './services/auth.service';
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
-        <Route exact path="/home">
-          <Home />
-        </Route>
-        <Route exact path="/upcomingmovie">
-          <UpcomingMovie />
-        </Route>
-        <Route exact path="/register">
-          <Register />
-        </Route>
-        <Route exact path="/login">
-          <Login />
-        </Route>
-        <Route exact path="/">
-          <Redirect to="/login" />
-        </Route>
-      </IonRouterOutlet>
-    </IonReactRouter>
-  </IonApp>
-);
+const App: React.FC = () => {
+
+  const [user, setUser] = useState<any>(undefined);
+
+  useEffect(() => {
+    const user = authService.getUser();
+    if (user) {
+      setUser(user);
+    }
+  }, [])
+
+  return (
+    <IonApp>
+      {user ?
+        <IonReactRouter>
+          <IonSplitPane contentId="main">
+            <Menu setLogOut={((user: any) => setUser(user))}/>
+            <IonRouterOutlet id="main">
+              <Route exact path="/home">
+                <Home />
+              </Route>
+              <Route exact path="/upcomingmovie">
+                <UpcomingMovie />
+              </Route>
+              {/* <Route exact path="/register">
+                <Register />
+              </Route>
+              <Route exact path="/login">
+                <Login />
+              </Route>
+              <Route exact path="/">
+                <Redirect to="/login" /> */}
+              {/* </Route> */}
+              <Route exact path="/">
+                <Redirect to="/upcomingmovie" />
+              </Route>
+            </IonRouterOutlet>
+          </IonSplitPane>
+        </IonReactRouter>
+        :
+        <IonReactRouter>
+          <IonRouterOutlet id="main">
+            <Route exact path="/register">
+              <Register />
+            </Route>
+            <Route exact path="/login">
+              <Login setLogin={((user: any) => setUser(user))} />
+            </Route>
+            <Route exact path="/">
+              <Redirect to="/login" />
+            </Route>
+          </IonRouterOutlet>
+        </IonReactRouter>
+      }
+    </IonApp >
+  );
+}
 
 export default App;

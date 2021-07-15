@@ -9,9 +9,10 @@ import InputContainer from "../../components/InputContainer";
 import { useState } from "react";
 import axios from 'axios';
 import { useHistory } from "react-router-dom";
+import authService from "../../services/auth.service";
 
 
-const Login: React.FC = () => {
+const Login: React.FC<{ setLogin: any }> = ({ setLogin }) => {
     const history = useHistory();
     const [mobile, setMobile] = useState<String>("");
     const [password, setpassword] = useState<String>("");
@@ -57,10 +58,14 @@ const Login: React.FC = () => {
                 setShowLoading(false);
                 if (res.data.status === "success") {
                     //authService.login(res.data);
-                    setHeader("Success!");
-                    setMessage("Login successfully");
-                    setIserror(true)
+                    // setHeader("Success!");
+                    // setMessage("Login successfully");
+                    // setIserror(true)
                     setLoginSuccess(true);
+                    authService.setUser(res.data);
+                    setLogin(res.data);
+                    history.push("/upcomingmovie")
+
                 }
                 else {
                     setHeader("Error!");
@@ -175,6 +180,9 @@ const Login: React.FC = () => {
                             <IonRow>
                                 <IonCol>
                                     <IonButton disabled={isErrorMobile || isErrorPassword} expand="block" type="submit">Login</IonButton>
+                                    <p style={{ fontSize: "medium" }}>
+                                        New User. Please   <a onClick={(e) => { e.preventDefault(); history.push("/register") }}> Register</a> Here
+                                    </p>
                                 </IonCol>
                             </IonRow>
                         </IonCard>

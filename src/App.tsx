@@ -27,6 +27,8 @@ import Login from './pages/Login/Login';
 import Menu from './components/Menu/Menu';
 import { useEffect, useState } from 'react';
 import authService from './services/auth.service';
+import Users from './pages/Users/Users';
+import UserProfile from './pages/UserProfile/UserProfile';
 
 const App: React.FC = () => {
 
@@ -44,13 +46,19 @@ const App: React.FC = () => {
       {user ?
         <IonReactRouter>
           <IonSplitPane contentId="main">
-            <Menu setLogOut={((user: any) => setUser(user))}/>
+            <Menu setLogOut={((user: any) => setUser(user))} />
             <IonRouterOutlet id="main">
               <Route exact path="/home">
                 <Home />
               </Route>
               <Route exact path="/upcomingmovie">
                 <UpcomingMovie />
+              </Route>
+              <Route exact path="/users">
+                <Users />
+              </Route>
+              <Route exact path="/userprofile">
+                <UserProfile />
               </Route>
               {/* <Route exact path="/register">
                 <Register />

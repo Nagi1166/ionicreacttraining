@@ -4,5 +4,5 @@ export interface IUser {
     lastName: string,
     id: number,
     email: string,
-    mobile: string
+    mobile?: string
 }

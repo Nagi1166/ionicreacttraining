@@ -1,3 +1,4 @@
+
 const setUser = (user: any) => {
     localStorage.setItem("training_user", JSON.stringify(user));
 };

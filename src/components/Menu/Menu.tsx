@@ -1,21 +1,33 @@
-import { IonContent, IonIcon, IonItem, IonItemDivider, IonLabel, IonList, IonListHeader, IonMenu, IonMenuToggle, IonNote } from "@ionic/react"
-import { home, homeOutline, logOut, logOutOutline, videocam, videocamOutline } from "ionicons/icons"
+import { IonAvatar, IonContent, IonIcon, IonImg, IonItem, IonItemDivider, IonLabel, IonList, IonListHeader, IonMenu, IonMenuToggle, IonNote } from "@ionic/react"
+import { home, homeOutline, logOut, logOutOutline, person, personOutline, videocam, videocamOutline } from "ionicons/icons"
 import { useEffect, useState } from "react"
 import { useHistory } from "react-router"
 import { IAppPage } from "../../model/IAppPage"
+import { IUser } from "../../model/IUser"
 import authService from "../../services/auth.service"
+import UserItem from "../UserItem/UserItem"
 import "./Menu.css"
 
-const Menu: React.FC<{setLogOut:any}> = ({setLogOut}) => {
+const Menu: React.FC<{ setLogOut: any }> = ({ setLogOut }) => {
     const history = useHistory();
-    const [userName, setUserName] = useState<String>("");
+    // const [userName, setUserName] = useState<String>("");
     const [isUserBoard, setUserBoard] = useState<boolean>(false);
     const [isAdminBoard, setAdminBoard] = useState<boolean>(false);
+    const [user, setUser] = useState<IUser>();
 
     useEffect(() => {
         const user = authService.getUser();
         if (user) {
-            setUserName(user.username);
+            //setUserName(user.username);
+            const userName = user.username.split(" ");
+            const userInfo: IUser = {
+                profilePic: "assets/imgs/avatar.png",
+                id: user.id,
+                firstName: userName[0],
+                lastName: userName[1],
+                email: user.email,
+            }
+            setUser(userInfo);
             setUserBoard(user.roles.includes("USER"))
             setAdminBoard(user.roles.includes("ADMIN"))
         }
@@ -29,13 +41,13 @@ const Menu: React.FC<{setLogOut:any}> = ({setLogOut}) => {
             mdIcon: home,
             roles: ["ADMIN", "USER"]
         },
-        // {
-        //     name: "Users",
-        //     url: "/home",
-        //     iosIcon: "homeOutline",
-        //     mdIcon: "home",
-        //     roles: ["ADMIN", "USER"]
-        // }
+        {
+            name: "Users",
+            url: "/users",
+            iosIcon: personOutline,
+            mdIcon: person,
+            roles: ["ADMIN"]
+        },
         {
             name: "Upcoming Movies",
             url: "/upcomingmovie",
@@ -55,8 +67,17 @@ const Menu: React.FC<{setLogOut:any}> = ({setLogOut}) => {
         <IonMenu contentId="main" side="start" type="overlay">
             <IonContent>
                 <IonList>
-                    <IonListHeader>Hi {userName}</IonListHeader>
-                    <IonNote className="note-welcome">Welcome to ionic react training </IonNote>
+                    {/* <IonListHeader>Hi {userName}</IonListHeader> */}
+                    {user ? <IonItem lines="none" detail={true} routerLink="/userprofile">
+                        <IonAvatar slot="start">
+                            <IonImg src={user.profilePic} />
+                        </IonAvatar>
+                        <IonLabel>
+                            <h2>{user.firstName} {user.lastName}</h2>
+                            <p>{user.email}</p>
+                        </IonLabel>
+                    </IonItem> : ""}
+                    {/* <IonNote className="note-welcome">Welcome to ionic react training </IonNote> */}
                     <IonItemDivider></IonItemDivider>
 
                     {
@@ -76,8 +97,8 @@ const Menu: React.FC<{setLogOut:any}> = ({setLogOut}) => {
                     }
 
                     <IonMenuToggle autoHide={false}>
-                        <IonItem detail={false} onClick={()=> handleLogout()}>
-                            <IonIcon slot="start" ios={logOutOutline} md={logOut}/>
+                        <IonItem detail={false} onClick={() => handleLogout()}>
+                            <IonIcon slot="start" ios={logOutOutline} md={logOut} />
                             <IonLabel>Log Out</IonLabel>
                         </IonItem>
                     </IonMenuToggle>

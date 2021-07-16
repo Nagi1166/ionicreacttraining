@@ -8,7 +8,7 @@ interface UserProps {
 const UserItem: React.FC<UserProps> = (props) => {
     const { user } = props;
     return (
-        <IonItem>
+        <IonItem detail={false}>
             <IonAvatar slot="start">
                 <IonImg src={user.profilePic} />
             </IonAvatar>

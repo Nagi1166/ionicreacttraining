@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "upcomingMovies",
+	"webDir": "build",
+	"bundledWebRuntime": false
+}

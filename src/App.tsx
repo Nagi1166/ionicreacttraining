@@ -58,7 +58,7 @@ const App: React.FC = () => {
                 <Users />
               </Route>
               <Route exact path="/userprofile">
-                <UserProfile />
+                <UserProfile setProfile={((user: any) => setUser(user))} />
               </Route>
               {/* <Route exact path="/register">
                 <Register />

@@ -28,8 +28,9 @@ const Users: React.FC = () => {
                 if (result.data.status === "success") {
                     const users: IUser[] = [];
                     result.data.result.forEach((element: any) => {
+                        const profilePic = element.profilePic ? `http://localhost:3000/uploads/${element.profilePic}` : "assets/imgs/avatar.png";
                         const user: IUser = {
-                            profilePic: "assets/imgs/avatar.png",
+                            profilePic,
                             id: element.ID,
                             lastName: element.LastName,
                             firstName: element.FirstName,

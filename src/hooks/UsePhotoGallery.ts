@@ -12,24 +12,30 @@ export function usePhotoGallery() {
     const [photo, setPhoto] = useState<IPhoto>();
 
     const takePhoto = async () => {
-        const config: ImageOptions = {
-            quality: 100,
-            resultType: CameraResultType.Uri,
-            source: CameraSource.Camera
+        try {
+            const config: ImageOptions = {
+                quality: 100,
+                resultType: CameraResultType.Uri,
+                source: CameraSource.Camera
+            }
+            const cameraPhoto = await Camera.getPhoto(config);
+            const fileName = new Date().getTime() + ".jpeg";
+            const imageData = await base64FromPath(cameraPhoto.webPath ? cameraPhoto.webPath : "");
+            const photoInfo: IPhoto = {
+                fileName: fileName,
+                webFilePath: cameraPhoto.webPath,
+                imageData
+            }
+            setPhoto(photoInfo);
         }
-        const cameraPhoto = await Camera.getPhoto(config);
-        const fileName = new Date().getTime() + ".jpeg";
-        const imageData = await base64FromPath(cameraPhoto.webPath ? cameraPhoto.webPath : "");
-        const photoInfo: IPhoto = {
-            fileName: fileName,
-            webFilePath: cameraPhoto.webPath,
-            imageData
+        catch (e) {
+            console.log("closed")
         }
-        setPhoto(photoInfo);
     }
 
     return {
         takePhoto,
+        setPhoto,
         photo,
     };
 }

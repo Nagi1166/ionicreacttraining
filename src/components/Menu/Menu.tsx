@@ -20,8 +20,9 @@ const Menu: React.FC<{ setLogOut: any }> = ({ setLogOut }) => {
         if (user) {
             //setUserName(user.username);
             const userName = user.username.split(" ");
+            const profilePic = user.profilePic ? `http://localhost:3000/uploads/${user.profilePic}` : "assets/imgs/avatar.png";
             const userInfo: IUser = {
-                profilePic: "assets/imgs/avatar.png",
+                profilePic,
                 id: user.id,
                 firstName: userName[0],
                 lastName: userName[1],
@@ -68,7 +69,7 @@ const Menu: React.FC<{ setLogOut: any }> = ({ setLogOut }) => {
             <IonContent>
                 <IonList>
                     {/* <IonListHeader>Hi {userName}</IonListHeader> */}
-                    {user ? <IonItem lines="none" detail={true} routerLink="/userprofile">
+                    {user ? <IonMenuToggle> <IonItem lines="none" detail={true} routerLink="/userprofile">
                         <IonAvatar slot="start">
                             <IonImg src={user.profilePic} />
                         </IonAvatar>
@@ -76,7 +77,7 @@ const Menu: React.FC<{ setLogOut: any }> = ({ setLogOut }) => {
                             <h2>{user.firstName} {user.lastName}</h2>
                             <p>{user.email}</p>
                         </IonLabel>
-                    </IonItem> : ""}
+                    </IonItem></IonMenuToggle> : ""}
                     {/* <IonNote className="note-welcome">Welcome to ionic react training </IonNote> */}
                     <IonItemDivider></IonItemDivider>
 
@@ -84,7 +85,7 @@ const Menu: React.FC<{ setLogOut: any }> = ({ setLogOut }) => {
                         appPages.map((value, index) => {
                             return (
                                 (value.roles.includes("ADMIN") && isAdminBoard) || (value.roles.includes("USER") && isUserBoard) ?
-                                    <IonMenuToggle autoHide={false}>
+                                    <IonMenuToggle key={index} autoHide={false}>
                                         <IonItem key={index} routerLink={value.url} routerDirection="none" detail={false}>
                                             <IonIcon slot="start" ios={value.iosIcon} md={value.mdIcon}></IonIcon>
                                             <IonLabel>{value.name}</IonLabel>

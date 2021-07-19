@@ -1,0 +1,9 @@
+.user-header {
+    background: #3dc2ff;
+    font-size: 18px;
+    color: white;
+}
+
+ion-col {
+    border: 1px solid lightgray;
+}

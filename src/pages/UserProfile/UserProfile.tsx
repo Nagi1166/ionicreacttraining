@@ -15,7 +15,7 @@ import "./UserProfile.css"
 const UserProfile: React.FC<{ setProfile: any }> = ({ setProfile }) => {
     const history = useHistory();
     const api = axios.create({
-        baseURL: `http://localhost:3000`
+        baseURL: `http://192.168.31.33:3000`
     })
 
     const userInfo = authService.getUser();
@@ -64,7 +64,7 @@ const UserProfile: React.FC<{ setProfile: any }> = ({ setProfile }) => {
                 setEmail(result.email ? result.email : "");
                 setPassword(result.password ? result.password : "");
                 if (result.profilePic) {
-                    const webFilePath = `http://localhost:3000/uploads/${result.profilePic}`;
+                    const webFilePath = `http://192.168.31.33:3000/uploads/${result.profilePic}`;
                     const imageData = await base64FromPath(webFilePath);
                     const photo: IPhoto = {
                         fileName: result.profilePic,

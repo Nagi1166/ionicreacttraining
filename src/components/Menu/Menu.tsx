@@ -20,7 +20,7 @@ const Menu: React.FC<{ setLogOut: any }> = ({ setLogOut }) => {
         if (user) {
             //setUserName(user.username);
             const userName = user.username.split(" ");
-            const profilePic = user.profilePic ? `http://localhost:3000/uploads/${user.profilePic}` : "assets/imgs/avatar.png";
+            const profilePic = user.profilePic ? `http://192.168.31.33:3000/uploads/${user.profilePic}` : "assets/imgs/avatar.png";
             const userInfo: IUser = {
                 profilePic,
                 id: user.id,

@@ -114,7 +114,7 @@ const Register: React.FC = () => {
         setErrorPassword("");
 
         const api = axios.create({
-            baseURL: `http://localhost:3000`
+            baseURL: `http://192.168.31.33:3000`
         })
 
         const data = {

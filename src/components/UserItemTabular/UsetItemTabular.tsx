@@ -9,14 +9,14 @@ const UserItemTabular: React.FC<UserItemProps> = (props) => {
     const { user } = props;
     return (
         <IonRow>
-            <IonCol size="3" className="user-profile-pic">
+            <IonCol size="3" className="user-profile-pic user-col">
                 <IonAvatar>
                     <IonImg src={user.profilePic}></IonImg>
                 </IonAvatar>
             </IonCol>
-            <IonCol size="3"><IonText>{user.firstName} {user.lastName}</IonText></IonCol>
-            <IonCol size="3"><IonText>{user.email}</IonText></IonCol>
-            <IonCol size="3"><IonText>{user.mobile}</IonText></IonCol>
+            <IonCol className="user-col" size="3"><IonText>{user.firstName} {user.lastName}</IonText></IonCol>
+            <IonCol className="user-col" size="3"><IonText>{user.email}</IonText></IonCol>
+            <IonCol className="user-col" size="3"><IonText>{user.mobile}</IonText></IonCol>
         </IonRow>
     )
 }

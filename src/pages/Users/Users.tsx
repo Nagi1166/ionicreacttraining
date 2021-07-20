@@ -114,16 +114,16 @@ const Users: React.FC = () => {
                     :
                     <IonGrid>
                         <IonRow className="user-header">
-                            <IonCol size="3">
+                            <IonCol className="user-col" size="3">
                                 <IonText>Profile Pic</IonText>
                             </IonCol>
-                            <IonCol size="3">
+                            <IonCol className="user-col" size="3">
                                 <IonText>Name</IonText>
                             </IonCol>
-                            <IonCol size="3">
+                            <IonCol className="user-col" size="3">
                                 <IonText>Email</IonText>
                             </IonCol>
-                            <IonCol size="3">
+                            <IonCol className="user-col" size="3">
                                 <IonText>mobile</IonText>
                             </IonCol>
                         </IonRow>

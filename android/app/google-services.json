@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "146892270951",
+    "project_id": "ionic-react-training",
+    "storage_bucket": "ionic-react-training.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:146892270951:android:f312d57d045def61bc53c2",
+        "android_client_info": {
+          "package_name": "io.ionic.starter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "146892270951-hvlgu04rf4e1q0edpq60bbbi0shlo3lo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDY6giMZhsYhbGUS9VqHkrcWoOekg0uwwQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "146892270951-hvlgu04rf4e1q0edpq60bbbi0shlo3lo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

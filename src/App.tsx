@@ -29,9 +29,9 @@ import { useEffect, useState } from 'react';
 import authService from './services/auth.service';
 import Users from './pages/Users/Users';
 import UserProfile from './pages/UserProfile/UserProfile';
-import { Notifications } from './pages/PushNotifications/PushNotification';
 import FileUpload from './pages/FileUpload/FileUpload';
 import { AppNotifications } from './pages/Notifications/AppNotifications';
+import SendEmail from './pages/SendEmail/SendEmail';
 
 const App: React.FC = () => {
 
@@ -66,6 +66,9 @@ const App: React.FC = () => {
               <Route exact path="/fileupload">
                 <FileUpload />
               </Route>
+              <Route exact path="/sendmail">
+                <SendEmail />
+              </Route>
               {/* <Route exact path="/register">
                 <Register />
               </Route>
@@ -94,7 +97,7 @@ const App: React.FC = () => {
               <AppNotifications />
             </Route>
             <Route exact path="/">
-              <Redirect to="/notifications" />
+              <Redirect to="/login" />
             </Route>
           </IonRouterOutlet>
         </IonReactRouter>

@@ -1,5 +1,5 @@
 import { IonAvatar, IonContent, IonIcon, IonImg, IonItem, IonItemDivider, IonLabel, IonList, IonListHeader, IonMenu, IonMenuToggle, IonNote } from "@ionic/react"
-import { cloudUpload, cloudUploadOutline, home, homeOutline, logOut, logOutOutline, person, personOutline, videocam, videocamOutline } from "ionicons/icons"
+import { cloudUpload, cloudUploadOutline, home, homeOutline, logOut, logOutOutline, mail, mailOutline, person, personOutline, videocam, videocamOutline } from "ionicons/icons"
 import { useEffect, useState } from "react"
 import { useHistory } from "react-router"
 import { IAppPage } from "../../model/IAppPage"
@@ -48,6 +48,13 @@ const Menu: React.FC<{ setLogOut: any }> = ({ setLogOut }) => {
             iosIcon: personOutline,
             mdIcon: person,
             roles: ["ADMIN"]
+        },
+        {
+            name: "Send Mail",
+            url: "/sendmail",
+            iosIcon: mailOutline,
+            mdIcon: mail,
+            roles: ["ADMIN", "USER"]
         },
         {
             name: "File Upload",
